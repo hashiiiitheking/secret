@@ -1,0 +1,450 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Will You Be My Valentine?</title>
+    <!-- Load Google Font "Nunito" for rounded, playful, legible typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800;900&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Reset & Base Styles */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Nunito', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: linear-gradient(180deg, #f9d5e5 0%, #fce4ec 100%);
+            min-height: 100vh;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow-x: hidden;
+            padding: 20px;
+            position: relative;
+        }
+
+        /* Main Container */
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            max-width: 800px;
+            width: 100%;
+            z-index: 10;
+            transition: opacity 0.4s ease, transform 0.4s ease;
+        }
+
+        /* Heading matching screenshot's dark crimson color */
+        h1.question-title {
+            color: #b71c2b;
+            font-size: clamp(1.85rem, 5vw, 2.75rem);
+            font-weight: 800;
+            margin-bottom: 24px;
+            letter-spacing: -0.02em;
+            line-height: 1.2;
+            text-shadow: 0 2px 10px rgba(183, 28, 43, 0.08);
+        }
+
+        /* Button Row */
+        .buttons {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            margin-bottom: 32px;
+            min-height: 60px;
+        }
+
+        /* Shared Button Styling */
+        button {
+            font-family: 'Nunito', sans-serif;
+            border: none;
+            border-radius: 8px;
+            color: #ffffff;
+            font-weight: 700;
+            cursor: pointer;
+            transition: transform 0.18s cubic-bezier(0.34, 1.56, 0.64, 1),
+                        background-color 0.2s ease,
+                        box-shadow 0.2s ease;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        button:active {
+            transform: scale(0.95);
+        }
+
+        /* Green Yes Button (.yes-button) */
+        .yes-button {
+            background-color: #4caf50;
+            font-size: 18px; /* Initial font size that gets multiplied by 1.5 */
+            padding: 0.65em 1.35em;
+            box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+            line-height: 1.2;
+        }
+
+        .yes-button:hover {
+            background-color: #43a047;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(76, 175, 80, 0.4);
+        }
+
+        /* Red No Button (.no-button) */
+        .no-button {
+            background-color: #e53935;
+            font-size: 18px;
+            padding: 0.65em 1.35em;
+            box-shadow: 0 4px 12px rgba(229, 57, 53, 0.3);
+            line-height: 1.2;
+        }
+
+        .no-button:hover {
+            background-color: #d32f2f;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(229, 57, 53, 0.4);
+        }
+
+        /* Cute Cat/Blob Illustration Container */
+        .character-wrapper {
+            width: 240px;
+            max-width: 75vw;
+            margin: 0 auto;
+            animation: gentleBounce 2.6s ease-in-out infinite;
+        }
+
+        @keyframes gentleBounce {
+            0%, 100% {
+                transform: translateY(0) scale(1, 1);
+            }
+            50% {
+                transform: translateY(-8px) scale(0.98, 1.02);
+            }
+        }
+
+        /* Happy Celebration Bounce */
+        .celebrate-bounce {
+            animation: happyJump 0.7s ease-in-out infinite alternate;
+        }
+
+        @keyframes happyJump {
+            0% {
+                transform: translateY(0) rotate(-3deg) scale(1.02, 0.98);
+            }
+            100% {
+                transform: translateY(-16px) rotate(3deg) scale(0.98, 1.03);
+            }
+        }
+
+        /* Hidden State Utility */
+        .hidden {
+            display: none !important;
+        }
+
+        /* Celebration View Styles */
+        .yes-screen h1 {
+            color: #b71c2b;
+            font-size: clamp(2rem, 5.5vw, 3rem);
+            font-weight: 900;
+            margin-bottom: 24px;
+            animation: popIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        @keyframes popIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.7);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        /* Subtle Replay Button */
+        .replay-button {
+            margin-top: 28px;
+            background-color: rgba(183, 28, 43, 0.12);
+            color: #b71c2b;
+            font-size: 14px;
+            font-weight: 700;
+            padding: 8px 18px;
+            border-radius: 999px;
+            box-shadow: none;
+        }
+
+        .replay-button:hover {
+            background-color: rgba(183, 28, 43, 0.22);
+            transform: translateY(-1px);
+        }
+
+        /* Floating Hearts Background Animation */
+        .hearts-container {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .floating-heart {
+            position: absolute;
+            bottom: -40px;
+            font-size: 24px;
+            opacity: 0.85;
+            animation: floatUp linear forwards;
+            user-select: none;
+        }
+
+        @keyframes floatUp {
+            0% {
+                transform: translateY(0) scale(0.8) rotate(0deg);
+                opacity: 0;
+            }
+            15% {
+                opacity: 0.9;
+            }
+            100% {
+                transform: translateY(-110vh) scale(1.25) rotate(25deg);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Container for ambient & celebration floating hearts -->
+    <div class="hearts-container" id="heartsContainer" aria-hidden="true"></div>
+
+    <!-- Main Proposal View -->
+    <main class="container" id="proposalScreen">
+        <h1 class="question-title">Will you be my Valentine?</h1>
+
+        <div class="buttons">
+            <button type="button" class="yes-button" onclick="handleYesClick()">Yes</button>
+            <button type="button" class="no-button" onclick="handleNoClick()">No</button>
+        </div>
+
+        <!-- Cute Blue Cat/Blob Character (Bugcat Capoo style matching screenshot) -->
+        <div class="character-wrapper" id="askingCharacter">
+            <svg viewBox="0 0 260 220" width="100%" height="auto" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Cute blue cat asking to be your Valentine">
+                <!-- Soft drop shadow under character -->
+                <ellipse cx="130" cy="198" rx="88" ry="12" fill="rgba(183, 28, 43, 0.12)" />
+
+                <!-- Left & Right Ears -->
+                <path d="M 65 82 C 62 42, 86 38, 102 65 Z" fill="#4cc3e6" stroke="#223a47" stroke-width="5.5" stroke-linejoin="round" />
+                <path d="M 195 82 C 198 42, 174 38, 158 65 Z" fill="#4cc3e6" stroke="#223a47" stroke-width="5.5" stroke-linejoin="round" />
+
+                <!-- Plump Squishy Body with stubby feet -->
+                <path d="M 52 145
+                         C 45 92, 85 60, 130 60
+                         C 175 60, 215 92, 208 145
+                         C 210 162, 214 176, 212 185
+                         C 208 193, 192 192, 182 188
+                         C 155 193, 105 193, 78 188
+                         C 68 192, 52 193, 48 185
+                         C 46 176, 50 162, 52 145 Z"
+                      fill="#4cc3e6" stroke="#223a47" stroke-width="5.5" stroke-linejoin="round" />
+
+                <!-- White Tummy Patch -->
+                <path d="M 82 186 C 95 162, 165 162, 178 186 C 152 190, 108 190, 82 186 Z" fill="#ffffff" />
+
+                <!-- Subtle Top Forehead Shading -->
+                <path d="M 96 68 Q 130 63 164 68" fill="none" stroke="#7bd8f2" stroke-width="4" stroke-linecap="round" />
+
+                <!-- Rosy Blush Cheeks -->
+                <ellipse cx="75" cy="126" rx="11" ry="6.5" fill="#ff8fa3" opacity="0.75" />
+                <ellipse cx="185" cy="126" rx="11" ry="6.5" fill="#ff8fa3" opacity="0.75" />
+
+                <!-- Cute Dot Eyes -->
+                <circle cx="83" cy="112" r="6" fill="#223a47" />
+                <circle cx="81" cy="110" r="1.8" fill="#ffffff" />
+                <circle cx="177" cy="112" r="6" fill="#223a47" />
+                <circle cx="175" cy="110" r="1.8" fill="#ffffff" />
+
+                <!-- Cute Cat ':3' / 'w' Mouth -->
+                <path d="M 113 113 Q 121.5 125 130 113 Q 138.5 125 147 113"
+                      fill="none" stroke="#223a47" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" />
+
+                <!-- Tiny Floating Question/Love Sparkle -->
+                <path d="M 130 26 C 130 22, 124 22, 124 27 C 124 31, 130 35, 130 35 C 130 35, 136 31, 136 27 C 136 22, 130 22, 130 26 Z"
+                      fill="#ff5c7c" opacity="0.85" />
+            </svg>
+        </div>
+    </main>
+
+    <!-- Celebration View (Displayed when "Yes" is clicked, simulating yes_page.html) -->
+    <section class="container yes-screen hidden" id="yesScreen" aria-live="polite">
+        <h1>Knew you would say yes! ❤️</h1>
+
+        <!-- Happy Celebrating Blue Cat Illustration -->
+        <div class="character-wrapper celebrate-bounce">
+            <svg viewBox="0 0 280 240" width="100%" height="auto" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Happy celebrating blue cat surrounded by hearts">
+                <!-- Soft shadow -->
+                <ellipse cx="140" cy="216" rx="86" ry="11" fill="rgba(183, 28, 43, 0.14)" />
+
+                <!-- Floating SVG Hearts around the cat -->
+                <path d="M 48 64 C 48 56, 36 56, 36 65 C 36 73, 48 81, 48 81 C 48 81, 60 73, 60 65 C 60 56, 48 56, 48 64 Z" fill="#ff3b6b" />
+                <path d="M 232 58 C 232 50, 220 50, 220 59 C 220 67, 232 75, 232 75 C 232 75, 244 67, 244 59 C 244 50, 232 50, 232 58 Z" fill="#ff3b6b" />
+                <path d="M 140 28 C 140 18, 126 18, 126 29 C 126 39, 140 49, 140 49 C 140 49, 154 39, 154 29 C 154 18, 140 18, 140 28 Z" fill="#e53935" />
+
+                <!-- Raised Happy Little Arms -->
+                <path d="M 65 132 C 35 112, 38 92, 58 102 C 66 106, 72 114, 76 122" fill="#4cc3e6" stroke="#223a47" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round" />
+                <path d="M 215 132 C 245 112, 242 92, 222 102 C 214 106, 208 114, 204 122" fill="#4cc3e6" stroke="#223a47" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round" />
+
+                <!-- Left & Right Ears -->
+                <path d="M 75 94 C 70 54, 96 50, 112 77 Z" fill="#4cc3e6" stroke="#223a47" stroke-width="5.5" stroke-linejoin="round" />
+                <path d="M 205 94 C 210 54, 184 50, 168 77 Z" fill="#4cc3e6" stroke="#223a47" stroke-width="5.5" stroke-linejoin="round" />
+
+                <!-- Plump Happy Body -->
+                <path d="M 64 156
+                         C 57 104, 95 72, 140 72
+                         C 185 72, 223 104, 216 156
+                         C 218 174, 222 188, 220 197
+                         C 216 205, 200 204, 190 200
+                         C 163 205, 117 205, 90 200
+                         C 80 204, 64 205, 60 197
+                         C 58 188, 62 174, 64 156 Z"
+                      fill="#4cc3e6" stroke="#223a47" stroke-width="5.5" stroke-linejoin="round" />
+
+                <!-- White Tummy Patch -->
+                <path d="M 94 198 C 107 174, 173 174, 186 198 C 160 202, 120 202, 94 198 Z" fill="#ffffff" />
+
+                <!-- Rosy Excited Cheeks -->
+                <ellipse cx="86" cy="138" rx="13" ry="7.5" fill="#ff758f" opacity="0.85" />
+                <ellipse cx="194" cy="138" rx="13" ry="7.5" fill="#ff758f" opacity="0.85" />
+
+                <!-- Happy Curved Eyes (^ ^) -->
+                <path d="M 85 124 Q 95 110 105 124" fill="none" stroke="#223a47" stroke-width="5" stroke-linecap="round" />
+                <path d="M 175 124 Q 185 110 195 124" fill="none" stroke="#223a47" stroke-width="5" stroke-linecap="round" />
+
+                <!-- Big Joyful Open Cat Smile -->
+                <path d="M 122 126 Q 131 136 140 126 Q 149 136 158 126" fill="none" stroke="#223a47" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" />
+                <path d="M 127 131 C 127 148, 153 148, 153 131 Z" fill="#ff6b81" stroke="#223a47" stroke-width="4" stroke-linejoin="round" />
+            </svg>
+        </div>
+
+        <button type="button" class="replay-button" onclick="resetProposal()">Ask again ↺</button>
+    </section>
+
+    <script>
+        // Array of playful messages cycled when clicking "No"
+        const messages = [
+            "Are you sure?",
+            "Really sure??",
+            "Are you positive?",
+            "Pookie please...",
+            "Just think about it!",
+            "If you say no, I will be really sad...",
+            "I will be very sad...",
+            "I will be very very very sad...",
+            "Ok fine, I will stop asking...",
+            "Just kidding, say yes please! ❤️"
+        ];
+
+        let messageIndex = 0;
+        let heartInterval = null;
+
+        /**
+         * Handles clicks on the "No" button:
+         * 1. Updates the No button text to the next playful prompt.
+         * 2. Multiplies the Yes button's computed font size by 1.5.
+         */
+        function handleNoClick() {
+            const noButton = document.querySelector(".no-button");
+            const yesButton = document.querySelector(".yes-button");
+
+            // Update No button text and advance index
+            noButton.textContent = messages[messageIndex];
+            messageIndex = (messageIndex + 1) % messages.length;
+
+            // Increase Yes button font size by 1.5x
+            const currentSize = parseFloat(
+                window.getComputedStyle(yesButton).fontSize
+            );
+            yesButton.style.fontSize = `${currentSize * 1.5}px`;
+        }
+
+        /**
+         * Handles clicks on the "Yes" button:
+         * Transitions smoothly to the celebratory view and triggers floating hearts.
+         */
+        function handleYesClick() {
+            const proposalScreen = document.getElementById("proposalScreen");
+            const yesScreen = document.getElementById("yesScreen");
+
+            proposalScreen.classList.add("hidden");
+            yesScreen.classList.remove("hidden");
+
+            // Burst of celebratory hearts
+            for (let i = 0; i < 18; i++) {
+                setTimeout(spawnFloatingHeart, i * 110);
+            }
+
+            // Continue gentle heart shower
+            if (!heartInterval) {
+                heartInterval = setInterval(spawnFloatingHeart, 450);
+            }
+        }
+
+        /**
+         * Creates a single floating heart emoji element that drifts upward.
+         */
+        function spawnFloatingHeart() {
+            const container = document.getElementById("heartsContainer");
+            const heart = document.createElement("span");
+            const heartSymbols = ["❤️", "💖", "💕", "💗", "💓"];
+            
+            heart.className = "floating-heart";
+            heart.textContent = heartSymbols[Math.floor(Math.random() * heartSymbols.length)];
+            heart.style.left = `${Math.random() * 96}%`;
+            heart.style.fontSize = `${Math.floor(Math.random() * 18) + 18}px`;
+            
+            const duration = (Math.random() * 2.5 + 3).toFixed(2);
+            heart.style.animationDuration = `${duration}s`;
+
+            container.appendChild(heart);
+
+            // Clean up DOM node after animation ends
+            setTimeout(() => {
+                if (heart.parentNode) {
+                    heart.remove();
+                }
+            }, parseFloat(duration) * 1000);
+        }
+
+        /**
+         * Resets the page back to the initial proposal state.
+         */
+        function resetProposal() {
+            const proposalScreen = document.getElementById("proposalScreen");
+            const yesScreen = document.getElementById("yesScreen");
+            const noButton = document.querySelector(".no-button");
+            const yesButton = document.querySelector(".yes-button");
+
+            messageIndex = 0;
+            noButton.textContent = "No";
+            yesButton.style.fontSize = "18px";
+
+            if (heartInterval) {
+                clearInterval(heartInterval);
+                heartInterval = null;
+            }
+
+            yesScreen.classList.add("hidden");
+            proposalScreen.classList.remove("hidden");
+        }
+    </script>
+</body>
+</html>
